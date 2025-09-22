@@ -24,9 +24,9 @@ void readSongs(vector<Song>& playlist, const string& songs);
 void displaySongs(const vector<Song>& playlist);
 void analyzePlaylist(const vector<Song>& playlist);
 
-// Function: Loads song data from 'songs.txt' into the playlist array we
+// Function: Loads song data from 'songs.txt' into the playlist vector we
 // initialized
-// argument: playlist array reference, filename string
+// argument: playlist vector reference, filename string
 // returns: nothing
 void readSongs(vector<Song>& playlist, const string& songs) {
   ifstream file(songs);
@@ -38,23 +38,20 @@ void readSongs(vector<Song>& playlist, const string& songs) {
   }
 
   Song s;
-  while (file && num < playlist.size()) {
-    file >> playlist[num].name >> playlist[num].genre >> playlist[num].artist >>
-        playlist[num].weekNumber;
-
-    if (playlist[num].weekNumber < 1 ||
-        playlist[num].weekNumber > playlist_size) {
-      cout << "Invalid week number (" << playlist[num].weekNumber
-           << ") at line " << num + 1 << ". Skipping entry. \n"
+  while (file >> s.name >> s.genre >> s.artist >> s.weekNumber) {
+    if (s.weekNumber < 1 || s.weekNumber > playlist_size) {
+      cout << "Invalid week number at " << s.weekNumber
+           << ". Skipping entry. \n"
            << endl;
+    } else {
+      playlist.push_back(s);
     }
-    num++;
   }
   file.close();
 }
 
 // Function: Prints songs in the playlist
-// argument: playlist array reference
+// argument: playlist vector reference
 // returns: nothing
 void displaySongs(const vector<Song>& playlist) {
   cout << "Weekly Playlist!\n";
@@ -66,9 +63,9 @@ void displaySongs(const vector<Song>& playlist) {
   }
 }
 
-// Function: Analyze the playlist on certain measures while using the std:array
-// member functions argument: playlist array reference returns: nothing
-void analyzePlaylist(const array<Song, playlist_size>& playlist) {
+// Function: Analyze the playlist on certain measures while using the std:vector
+// member functions argument: playlist vector reference returns: nothing
+void analyzePlaylist(const vector<Song>& playlist) {
   cout << "Playlist Wrapped:\n";
 
   int week = 1;
